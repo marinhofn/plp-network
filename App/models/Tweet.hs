@@ -1,19 +1,34 @@
+{-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
+{-# HLINT ignore "Redundant id" #-}
+{-# HLINT ignore "Eta reduce" #-}
 module Models.Tweet where
+    import Database.PostgreSQL.Simple
+    import Database.PostgreSQL.Simple.FromRow (field)
+    import qualified Database.PostgreSQL.Simple.FromRow as Database.PostgreSQL.Simple.Internal
     data Tweet = Tweet {
         idUsuario:: String,        
-		id:: Int,
+		idTweet:: Int,
         conteudo:: String,
         curtidas:: Int,
         timeStamp:: Int,
         isResposta:: Bool,
-        respostas:: [(String,Int)]
+        nRespostas:: Int
     } deriving (Show, Read)
+    
+    instance FromRow Tweet where
+    fromRow = Tweet <$> field
+                    <*> field
+                    <*> field
+                    <*> field
+                    <*> field
+                    <*> field
+                    <*> field
 
     getidUsuario:: Tweet -> String
     getidUsuario a = idUsuario a
 
-    getId:: Tweet -> String
-    getId a = id a
+    getId:: Tweet -> Int
+    getId a = idTweet a
 
     getTweet:: Tweet -> String
     getTweet a = conteudo a
@@ -21,18 +36,13 @@ module Models.Tweet where
     getCurtidas:: Tweet -> Int
     getCurtidas a = curtidas a
 
-    getRepostas:: Tweet -> [Tweet]
-    getRepostas a = respostas a
-
-    editTweet:: Tweet -> String -> Tweet
-    editTweet a b = Tweet { (getidUsuario a) (getid a) b (getCurtidas a) (getRepostas a)}
+    getNumRespostas:: Tweet -> Int
+    getNumRespostas a = nRespostas a
 
     exibeTweet:: Tweet -> IO()
     exibeTweet a = do
-        putStrLn getidUsuario a
-        putStrLn getTweet a
-        putStrLn "Curtidas: " ++ show getCurtidas a
-        putStrLn "Respostas:"
-        respostas <- getRepostas a
-        map exibeTweet respostas
+        putStrLn $ getidUsuario a
+        putStrLn $ getTweet a
+        putStrLn $ "Curtidas: " ++ show (getCurtidas a)
+        putStrLn $ "Respostas:" ++ show (getNumRespostas a)
         putStrLn "--------"

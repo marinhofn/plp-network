@@ -1,11 +1,12 @@
 {-# LANGUAGE OverloadedStrings #-}
+{-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
 module LocalDB.ConnectionDB where
 import Database.PostgreSQL.Simple
 
 localDB:: ConnectInfo
 localDB = defaultConnectInfo {
     connectHost = "localhost",
-    connectDatabase = "ARedeSocial",
+    connectDatabase = "aRedeSocial",
     connectUser = "postgres",
     connectPassword = "741258963",
     connectPort = 5432
@@ -13,13 +14,13 @@ localDB = defaultConnectInfo {
 
 iniciandoDatabase :: IO Connection
 iniciandoDatabase = do
-    c <- connectionMyDB
-	createUsers c
-    createTweets c 
-    createRespostas c
-    createCurtidas c
-    createSeguidores c
-    return c
+    con <- connectionMyDB
+    createUsers con
+    createTweets con
+    createRespostas con
+    createCurtidas con
+    createSeguidores con
+    return con
 
 connectionMyDB :: IO Connection
 connectionMyDB = connect localDB
@@ -30,7 +31,6 @@ createUsers conn = do
     execute_ conn "CREATE TABLE IF NOT EXISTS usuarios(\
                     \id VARCHAR(15) NOT NULL UNIQUE,\
                     \senha VARCHAR(15) NOT NULL,\
-                    \numeroTweets INT DEFAULT 0,\
                     \CONSTRAINT pk_usuarios PRIMARY KEY(id));"
     return()
 
@@ -39,11 +39,12 @@ createTweets :: Connection -> IO()
 createTweets conn = do
     execute_ conn "CREATE TABLE IF NOT EXISTS tweets(\
                     \id VARCHAR(15) NOT NULL,\
-                    \idTweet INT NOT NULL,\
+                    \idTweet SERIAL NOT NULL,\
                     \conteudo VARCHAR(150) NOT NULL,\
                     \curtidas INT DEFAULT 0,\
                     \timeStamp INT NOT NULL,\
                     \isResposta BOOLEAN NOT NULL,\
+                    \nRespostas INT DEFAULT 0,\
                     \CONSTRAINT fk_usuarios FOREIGN KEY (id) REFERENCES Usuarios(id) ON DELETE CASCADE,\
                     \CONSTRAINT pk_tweets PRIMARY KEY (id, idTweet));"
     return()
