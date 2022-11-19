@@ -27,13 +27,28 @@ adicionarResposta conn idPrincipal idTweetPrincipal idResposta idTweetResposta =
     execute conn q (idPrincipal, idTweetPrincipal, idResposta, idTweetResposta)
     return ()
 
-getTweets:: Connection -> IO [Tweet]
-getTweets conn = do
-    query_ conn "SELECT i.id,\
-                       \i.idTweet,\
-                       \i.conteudo,\
-                       \i.curtidas,\
-                       \i.timestamp, \
-                       \i.isResposta,\
-                       \i.nRespostas \
-                       \FROM tweet i":: IO [Tweet]
+adicionarNumeroResposta:: Connection -> String -> Int -> IO ()
+adicionarNumeroResposta conn id idTweet  = do
+    let q = "update Tweets set nRespostas = nRespostas + 1 where id=? and idTweet=?"
+    execute conn q (id, idTweet)
+    return ()
+
+adicionarCurtida:: Connection -> String -> String -> Int -> IO ()
+adicionarCurtida conn id idCurtido idTweetCurtido = do
+    let q = "insert into curtidas (id, idCurtido, idTweetCurtido) values (?, ?, ?)"
+    execute conn q (id, idCurtido, idTweetCurtido)
+    return ()
+
+adicionarNumeroCurtida:: Connection -> String -> Int -> IO ()
+adicionarNumeroCurtida conn id idTweet  = do
+    let q = "update Tweets set curtidas = curtidas + 1 where id=? and idTweet=?"
+    execute conn q (id, idTweet)
+    return ()
+
+getTweets:: Connection -> String -> IO [Tweet]
+getTweets conn id = do
+    let q = "select * from Tweets order by timeStamp desc"
+    query_ conn q :: IO [Tweet]
+
+    
+    

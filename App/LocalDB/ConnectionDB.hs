@@ -6,7 +6,7 @@ import Database.PostgreSQL.Simple
 localDB:: ConnectInfo
 localDB = defaultConnectInfo {
     connectHost = "localhost",
-    connectDatabase = "aRedeSocial",
+    connectDatabase = "a-rede-social",
     connectUser = "postgres",
     connectPassword = "741258963",
     connectPort = 5432
@@ -57,7 +57,6 @@ createRespostas conn = do
                     \idTweetPrincipal INT NOT NULL,\
                     \idResposta VARCHAR(15) NOT NULL,\
                     \idTweetResposta INT NOT NULL,\
-                    \CONSTRAINT pk_respostas PRIMARY KEY (idPrincipal, idTweetPrincipal),\
                     \CONSTRAINT fk_tweets1 FOREIGN KEY (idPrincipal, idTweetPrincipal) REFERENCES tweets(id, idTweet) ON DELETE CASCADE,\
                     \CONSTRAINT fk_tweets2 FOREIGN KEY (idResposta, idTweetResposta) REFERENCES tweets(id, idTweet) ON DELETE CASCADE);"
     return()
@@ -68,7 +67,6 @@ createCurtidas conn = do
                     \id VARCHAR(15) NOT NULL,\
                     \idCurtido VARCHAR(15) NOT NULL,\
                     \idTweetCurtido INT NOT NULL,\
-                    \CONSTRAINT pk_curtidas PRIMARY KEY (id),\
                     \CONSTRAINT fk_usuario FOREIGN KEY (id) REFERENCES usuarios(id) ON DELETE CASCADE,\
                     \CONSTRAINT fk_tweets FOREIGN KEY (idCurtido, idTweetCurtido) REFERENCES tweets(id, idTweet) ON DELETE CASCADE);"
     return()

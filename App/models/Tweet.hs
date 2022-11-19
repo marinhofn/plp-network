@@ -1,10 +1,9 @@
-{-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
-{-# HLINT ignore "Redundant id" #-}
-{-# HLINT ignore "Eta reduce" #-}
+{-# LANGUAGE DeriveAnyClass #-}
+{-# LANGUAGE DeriveGeneric #-}
+
 module Models.Tweet where
-    import Database.PostgreSQL.Simple
-    import Database.PostgreSQL.Simple.FromRow (field)
-    import qualified Database.PostgreSQL.Simple.FromRow as Database.PostgreSQL.Simple.Internal
+    import GHC.Generics (Generic)
+    import Database.PostgreSQL.Simple (FromRow)
     data Tweet = Tweet {
         idUsuario:: String,        
 		idTweet:: Int,
@@ -13,16 +12,8 @@ module Models.Tweet where
         timeStamp:: Int,
         isResposta:: Bool,
         nRespostas:: Int
-    } deriving (Show, Read)
+    } deriving (Show, Read, Generic, FromRow)
     
-    instance FromRow Tweet where
-    fromRow = Tweet <$> field
-                    <*> field
-                    <*> field
-                    <*> field
-                    <*> field
-                    <*> field
-                    <*> field
 
     getidUsuario:: Tweet -> String
     getidUsuario a = idUsuario a
