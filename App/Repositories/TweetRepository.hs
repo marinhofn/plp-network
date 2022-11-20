@@ -45,10 +45,63 @@ adicionarNumeroCurtida conn id idTweet  = do
     execute conn q (id, idTweet)
     return ()
 
-getTweets:: Connection -> String -> IO [Tweet]
-getTweets conn id = do
-    let q = "select * from Tweets order by timeStamp desc"
-    query_ conn q :: IO [Tweet]
+getTweetsCurtidos:: Connection -> String -> IO [Tweet]
+getTweetsCurtidos conn id = do
+    let q = "select Tweets.id, \
+                \Tweets.idTweet, \
+                \Tweets.conteudo, \
+                \Tweets.curtidas, \
+                \Tweets.timeStamp, \
+                \Tweets.isResposta, \
+                \Tweets.nRespostas \
+                \from Tweets INNER JOIN Curtidas \
+                \on Tweets.idTweet = Curtidas.idTweetCurtido \
+                \where Curtidas.id = ?\
+                \order by timeStamp desc"          
+    query conn q [id]:: IO [Tweet]
 
     
-    
+getTweetsUsuario:: Connection -> String -> IO [Tweet]
+getTweetsUsuario conn id = do
+    let q = "select Tweets.id, \
+                \Tweets.idTweet, \
+                \Tweets.conteudo, \
+                \Tweets.curtidas, \
+                \Tweets.timeStamp, \
+                \Tweets.isResposta, \
+                \Tweets.nRespostas \
+                \from Tweets \
+                \where Tweets.id = ?\
+                \order by timeStamp desc"          
+    query conn q [id]:: IO [Tweet]
+
+getTweetsTimeLine:: Connection -> String -> IO [Tweet]
+getTweetsTimeLine conn id = do
+    let q = "select Tweets.id, \
+                \Tweets.idTweet, \
+                \Tweets.conteudo, \
+                \Tweets.curtidas, \
+                \Tweets.timeStamp, \
+                \Tweets.isResposta, \
+                \Tweets.nRespostas \
+                \from Tweets INNER JOIN Seguidores \
+                \on Tweets.id = Seguidores.idSeguido \
+                \where Seguidores.id = ?\
+                \order by timeStamp desc"        
+    query conn q [id]:: IO [Tweet]
+
+
+getRespostas:: Connection ->  String -> IO [Tweet]
+getRespostas conn idTweet= do
+    let q = "select Tweets.id, \
+                \Tweets.idTweet, \
+                \Tweets.conteudo, \
+                \Tweets.curtidas, \
+                \Tweets.timeStamp, \
+                \Tweets.isResposta, \
+                \Tweets.nRespostas \
+                \from Tweets INNER JOIN RespostasTweet \
+                \on Tweets.idTweet = RespostasTweet.idTweetResposta \
+                \where RespostasTweet.idTweetPrincipal = ?\
+                \order by timeStamp desc"        
+    query conn q [idTweet]:: IO [Tweet]

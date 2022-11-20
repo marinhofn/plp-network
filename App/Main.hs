@@ -8,6 +8,6 @@ import Repositories.TweetRepository
 main:: IO()
 main = do
     conn <- iniciandoDatabase
-    teste <- getTweets conn "usuario4"
+    teste <- getRespostas conn "8"
     print teste
-    print "oi."   
+    print "oi"   
