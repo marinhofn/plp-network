@@ -5,7 +5,7 @@ module Models.Tweet where
     import GHC.Generics (Generic)
     import Database.PostgreSQL.Simple (FromRow)
     data Tweet = Tweet {
-        idUsuario:: String,        
+        idUsuario:: String,
 		idTweet:: Int,
         conteudo:: String,
         curtidas:: Int,
