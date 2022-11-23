@@ -34,5 +34,5 @@ executable aRedeSocial
                     time >= 0,
                     process >= 0,
                     ansi-terminal >= 0,
-    hs-source-dirs:   app
+    hs-source-dirs:   App
     default-language: Haskell2010
