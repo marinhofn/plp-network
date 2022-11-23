@@ -7,6 +7,7 @@ import Repositories.TweetRepository
 import Data.Time.Clock
 import System.Process
 import System.Console.ANSI
+import Services.UsuarioService;
 
 --   _______         __                           __    
 --  |    |  |.-----.|  |_ .--.--.--..-----..----.|  |--.
@@ -90,9 +91,10 @@ cadastro nome senha = do
     -- TODO: checar se nome já existe
     putStrLn "\nCadastrando..."
 
-    --FUNCIONANDO
-    --conn <- iniciandoDatabase
-    --cadastrarUsuario conn nome senha
+    -- FUNCIONANDO
+    conn <- iniciandoDatabase
+    -- cadastrarUsuario conn nome senha
+    realizarCadastro conn nome senha
 
 
 -------------------------------------------------------
