@@ -8,7 +8,7 @@ localDB = defaultConnectInfo {
     connectHost = "localhost",
     connectDatabase = "a-rede-social",
     connectUser = "postgres",
-    connectPassword = "741258963",
+    connectPassword = "postgres",
     connectPort = 5432
 }
 
