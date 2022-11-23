@@ -59,7 +59,9 @@ loginTerminal = do
         --putStrLn "Login efetuado com sucesso!"
         menuUsuario
     else do
-        putStrLn "Login ou senha incorretos!"
+        putStrLn "\nLogin ou senha incorretos!"
+        putStrLn "\nPressione qualquer botão para tentar novamente..."
+        aux <- getLine
         loginTerminal
     -- TODO: fazer o login
     -- if (senha == (usuarioSenha usuario)) then do
