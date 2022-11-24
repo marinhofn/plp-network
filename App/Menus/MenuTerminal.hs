@@ -54,23 +54,22 @@ loginTerminal = do
     login <- getLine
     putStrLn "Digite sua senha: "
     senha <- getLine
-    --conn <- iniciandoDatabase
-    --usuario <- getUsuario conn login
-    if (senha == "123") then do
-        --putStrLn "Login efetuado com sucesso!"
+
+    conn <- iniciandoDatabase
+    usuario <- getUsuario conn login
+    usuarioSenha <- getSenha conn login
+
+    if usuario == login && usuarioSenha == senha then do
+        putStrLn "\nLogin efetuado com sucesso!"
+        putStrLn "Pressione qualquer botão para continuar..."
+        aux <- getLine
         menuUsuario
     else do
-        putStrLn "\nLogin ou senha incorretos!"
-        putStrLn "\nPressione qualquer botão para tentar novamente..."
+        putStrLn "\nLogin ou senha inválidos!"
+        putStrLn "Pressione qualquer botão para tentar novamente..."
         aux <- getLine
         loginTerminal
-    -- TODO: fazer o login
-    -- if (senha == (usuarioSenha usuario)) then do
-    --     putStrLn "Login efetuado com sucesso!"
-    --     menuPrincipal
-    -- else do
-    --     putStrLn "Login ou senha incorretos!"
-    --     loginTerminal
+
 
 -- Menu de Cadastro
 cadastroTerminal :: IO()

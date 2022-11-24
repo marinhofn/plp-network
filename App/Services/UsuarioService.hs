@@ -6,9 +6,24 @@ import Repositories.UsuarioRepository
 
 realizarCadastro :: Connection -> String -> String -> IO ()
 realizarCadastro conn nome senha = do
-    --conn <- iniciandoDatabase
     cadastrarUsuario conn nome senha
     putStrLn "Cadastro efetuado com sucesso!"
     putStrLn "Pressione qualquer botão para voltar ao menu inicial..."
     aux <- getLine
     return ()
+
+
+getUsuario :: Connection -> String -> IO String
+getUsuario conn login = do
+    putStrLn "Validando Usuário..."
+    nome <- validarUsuario conn login
+    return nome
+
+getSenha :: Connection -> String -> IO String
+getSenha conn login = do
+    putStrLn "Validando Senha..."
+    senha <- validarSenha conn login
+    return senha
+
+
+    
