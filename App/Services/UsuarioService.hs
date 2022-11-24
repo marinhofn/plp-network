@@ -25,5 +25,11 @@ getSenha conn login = do
     senha <- validarSenha conn login
     return senha
 
-
-    
+validarLogin :: Connection -> String -> String -> IO Bool
+validarLogin conn login senha = do
+    usuario <- getUsuario conn login
+    usuarioSenha <- getSenha conn login
+    if usuario == login && usuarioSenha == senha then do
+        return True
+    else do
+        return False

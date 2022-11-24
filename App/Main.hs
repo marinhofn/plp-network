@@ -12,4 +12,4 @@ main = do
     teste <- getRespostas conn "8"
     print teste
     menuInicial
-    print "ending....."   
+    print "ending:::::"   

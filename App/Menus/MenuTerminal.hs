@@ -56,19 +56,32 @@ loginTerminal = do
     senha <- getLine
 
     conn <- iniciandoDatabase
-    usuario <- getUsuario conn login
-    usuarioSenha <- getSenha conn login
+    validado <- validarLogin conn login senha
 
-    if usuario == login && usuarioSenha == senha then do
+    --usuario <- getUsuario conn login
+    --usuarioSenha <- getSenha conn login
+
+    if validado then do
         putStrLn "\nLogin efetuado com sucesso!"
         putStrLn "Pressione qualquer botão para continuar..."
         aux <- getLine
         menuUsuario
     else do
         putStrLn "\nLogin ou senha inválidos!"
-        putStrLn "Pressione qualquer botão para tentar novamente..."
+        putStrLn "Pressione qualquer botão para voltar ao menu inicial..."
         aux <- getLine
-        loginTerminal
+        menuInicial
+
+    -- if usuario == login && usuarioSenha == senha then do
+    --     putStrLn "\nLogin efetuado com sucesso!"
+    --     putStrLn "Pressione qualquer botão para continuar..."
+    --     aux <- getLine
+    --     menuUsuario
+    -- else do
+    --     putStrLn "\nLogin ou senha inválidos!"
+    --     putStrLn "Pressione qualquer botão para tentar novamente..."
+    --     aux <- getLine
+    --     loginTerminal
 
 
 -- Menu de Cadastro
