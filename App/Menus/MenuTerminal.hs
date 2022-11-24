@@ -27,7 +27,7 @@ title = do
     putStrLn  "         |__|____||_____||____||________||_____||__|  |__|__|"
     putStrLn  "\n"                                                      
     
-
+-- Menu
 menuInicial :: IO()
 menuInicial = do
     clearScreen
@@ -45,6 +45,7 @@ menuInicial = do
             putStrLn "Opção inválida"
             menuInicial
 
+-- Menu de login
 loginTerminal :: IO()
 loginTerminal = do
     clearScreen
@@ -71,17 +72,6 @@ loginTerminal = do
         putStrLn "Pressione qualquer botão para voltar ao menu inicial..."
         aux <- getLine
         menuInicial
-
-    -- if usuario == login && usuarioSenha == senha then do
-    --     putStrLn "\nLogin efetuado com sucesso!"
-    --     putStrLn "Pressione qualquer botão para continuar..."
-    --     aux <- getLine
-    --     menuUsuario
-    -- else do
-    --     putStrLn "\nLogin ou senha inválidos!"
-    --     putStrLn "Pressione qualquer botão para tentar novamente..."
-    --     aux <- getLine
-    --     loginTerminal
 
 
 -- Menu de Cadastro
