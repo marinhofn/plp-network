@@ -5,9 +5,11 @@ import Repositories.UsuarioRepository
 import Repositories.TweetRepository
 --import Menus.MenuTerminal
 import Data.Time.Clock
+import Data.Time.Clock.POSIX
 import System.Process
 import System.Console.ANSI
 import Services.UsuarioService;
+import Services.TweetService;
 import System.IO.Error
 import Control.Exception
 import Models.Tweet
@@ -69,7 +71,7 @@ loginTerminal = do
         putStrLn "\nLogin efetuado com sucesso!"
         putStrLn "Pressione qualquer botão para continuar..."
         aux <- getLine
-        menuUsuario conn
+        menuUsuario login conn
     else do
         putStrLn "\nLogin ou senha inválidos!"
         putStrLn "Pressione qualquer botão para voltar ao menu inicial..."
@@ -105,8 +107,8 @@ cadastro conn nome senha = do
 -------------------------------------------------------
 
 -- Menu de funções para um Usuario já logado
-menuUsuario :: Connection -> IO()
-menuUsuario conn = do
+menuUsuario :: String -> Connection -> IO()
+menuUsuario login conn = do
     clearScreen
     title
     --putStrLn "\nLogin efetuado com sucesso!\n"
@@ -116,61 +118,62 @@ menuUsuario conn = do
     putStrLn "4 - Ver quem você segue"
     putStrLn "\n5 - Deslogar\n"
     op <- getLine
-    redirectMenuUsuario conn op
+    redirectMenuUsuario login conn op
 
 -- Redirecionar do Menu de Usuario para a função desejada
-redirectMenuUsuario :: Connection -> String -> IO()
-redirectMenuUsuario conn op
-    | op == "1" = criarTweetMenu conn
-    | op == "2" = verTweets conn
-    | op == "3" = verSeguidores conn
-    | op == "4" = verSeguindo conn
+redirectMenuUsuario ::String -> Connection -> String -> IO()
+redirectMenuUsuario login conn op
+    | op == "1" = criarTweetMenu login conn
+    | op == "2" = verTweets conn login
+    | op == "3" = verSeguidores login conn
+    | op == "4" = verSeguindo login conn
     | op == "5" = sair
     | otherwise = do
         putStrLn "Opção inválida!"
-        menuUsuario conn
+        menuUsuario login conn
 
 
-criarTweetMenu :: Connection -> IO()
-criarTweetMenu conn = do
+criarTweetMenu :: String -> Connection -> IO()
+criarTweetMenu login conn = do
     clearScreen
     title
     putStrLn "Digite o conteúdo do tweet: "
     conteudo <- getLine
-    
-    --putStrLn "Digite o id do usuário: "
-    --id <- getLine
-    --print conteudo
+    actualTime <- getCurrentTime
 
     --TODO: verificar a funcionalidade da criacao do Tweet
-    --conn <- iniciandoDatabase
-    --criarTweet conn conteudo id getCurrentTime False
-    --insertTweet conn id conteudo
+    criarTweetService login conn conteudo actualTime
+    --insertTweet login conn conteudo
 
-    menuUsuario conn
+    putStrLn "\nTweet publicado!"
+
+    putStrLn "Pressione qualquer botão para voltar ao menu inicial..."
+
+    aux <- getLine
+    menuUsuario login conn
 
 verTweets :: Connection -> String -> IO()
 verTweets conn login = do
     --TODO: remover o id do usuario e pegar o id do usuario logado
     putStrLn "\n - vendo tweets - \n"
     
-    mostrarListaTweet (listarTweetsUsuario conn login)    
+    --mostrarListaTweet (listarTweetsUsuario conn login)    
 
     -- id <- getLine
     --conn <- iniciandoDatabase
     --tweets <- getTweets conn id
     --print tweets
     x <- getLine
-    menuUsuario conn
+    menuUsuario login conn
 
-mostrarListaTweet :: IO [Tweet] -> IO()
-mostrarListaTweet [] = putStrLn "Nada para mostrar"
-mostrarListaTweet (x:xs) = do
-    putStrLn (show (idTweet x) ++ " - " ++ conteudo x ++ "\n")
-    mostrarListaTweet xs
+-- mostrarListaTweet :: IO [Tweet] -> IO()
+-- mostrarListaTweet [] = putStrLn "Nada para mostrar"
+-- mostrarListaTweet (x:xs) = do
+--     putStrLn (show (idTweet x) ++ " - " ++ conteudo x ++ "\n")
+--     mostrarListaTweet xs
 
-verSeguidores :: Connection -> IO()
-verSeguidores conn = do
+verSeguidores :: String -> Connection -> IO()
+verSeguidores login conn = do
     putStrLn "\n - vendo seguidores - \n"
     
     --id <- getLine
@@ -178,10 +181,10 @@ verSeguidores conn = do
     --seguidores <- getSeguidores conn id
     --print seguidores
 
-    menuUsuario conn
+    menuUsuario login conn
 
-verSeguindo :: Connection -> IO()
-verSeguindo conn = do
+verSeguindo :: String -> Connection -> IO()
+verSeguindo login conn = do
     putStrLn "\n - vendo quem você segue - \n"
     
     --id <- getLine
@@ -189,18 +192,10 @@ verSeguindo conn = do
     --seguindo <- getSeguindo conn id
     --print seguindo
 
-    menuUsuario conn
+    menuUsuario login conn
 
 
 sair :: IO()
 sair = do
     putStrLn "\nSaindo...\n"
     menuInicial
-
-
-
--- getUsuario :: Connection -> String -> IO Usuario
--- getUsuario conn login = do
---     [usuario] <- query conn "SELECT * FROM usuarios WHERE id = ?" (Only login)
---     return usuario
-    
