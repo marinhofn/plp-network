@@ -42,7 +42,7 @@ createTweets conn = do
                     \idTweet SERIAL NOT NULL,\
                     \conteudo VARCHAR(150) NOT NULL,\
                     \curtidas INT DEFAULT 0,\
-                    \timeStamp INT NOT NULL,\
+                    \timeStamp NUMERIC NOT NULL,\
                     \isResposta BOOLEAN NOT NULL,\
                     \nRespostas INT DEFAULT 0,\
                     \CONSTRAINT fk_usuarios FOREIGN KEY (id) REFERENCES Usuarios(id) ON DELETE CASCADE,\
