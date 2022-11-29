@@ -18,13 +18,11 @@ realizarCadastro conn nome senha = do
 
 getUsuario :: Connection -> String -> IO String
 getUsuario conn login = do
-    putStrLn "Validando Usuário..."
     nome <- validarUsuario conn login
     return nome
 
 getSenha :: Connection -> String -> IO String
 getSenha conn login = do
-    putStrLn "Validando Senha..."
     senha <- validarSenha conn login
     return senha
 
@@ -37,5 +35,19 @@ validarLogin conn login senha = do
     else do
         return False
 
--- listarTweetsUsuario :: Connection -> String -> IO [Tweet]
--- listarTweetsUsuario conn login = getTweetsUsuario conn login
+mostrarSeguindo :: Connection -> String -> IO()
+mostrarSeguindo conn login = do
+    seguidores <- getSeguindo conn login
+    putStrLn seguidores
+
+seguir :: Connection -> String -> String -> IO()
+seguir conn login nome = do
+    followFriend conn login nome
+    putStrLn "Seguindo com sucesso!"
+    putStrLn "Pressione qualquer botão para voltar ao menu inicial..."
+    return ()
+
+mostrarSeguidores :: Connection -> String -> IO()
+mostrarSeguidores conn login = do
+    seguidores <- getSeguidores conn login
+    putStrLn seguidores

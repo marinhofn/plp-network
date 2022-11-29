@@ -121,3 +121,8 @@ getLastTweet conn user = do
                 \order by timeStamp desc \
                 \limit 5"        
     query conn q [user]:: IO [Tweet]
+
+getTweetRepository :: Connection -> Int -> Tweet
+getTweetRepository conn idTweet = do
+    let q = "select * from Tweets where idTweet = ?"
+    query conn q [idTweet]:: IO [Tweet]

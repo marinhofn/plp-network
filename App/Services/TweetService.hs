@@ -14,21 +14,31 @@ import Models.Tweet
 --     criarTweet conn login conteudo time False
 --     return ()
 
-criarTweetService :: String -> Connection -> String -> UTCTime -> IO () 
-criarTweetService login conn conteudo time = do
-    criarTweet conn login conteudo (timeInt time) False
-    return ()
-
 -- criarRespostaService :: String -> Connection -> String -> UTCTime -> IO () 
 -- criarTweetService login conn conteudo time = do
 --     criarTweet conn login conteudo (timeInt time) False
 --     return ()
 
+criarTweetService :: String -> Connection -> String -> UTCTime -> IO () 
+criarTweetService login conn conteudo time = do
+    criarTweet conn login conteudo (timeInt time) False
+    return ()
+
 mostrarTweets:: [Tweet] -> IO()
-mostrarTweets [] = print " "
+mostrarTweets [] = putStrLn ""
 mostrarTweets (x:xs) = do
     exibeTweet x
     mostrarTweets xs
 
 timeInt :: UTCTime -> Int
 timeInt = floor . (1e9 *) . nominalDiffTimeToSeconds . utcTimeToPOSIXSeconds
+
+getTimeLine :: Connection -> String -> IO [Tweet]
+getTimeLine conn login = do
+    tweets <- getTweetsTimeLine conn login
+    return tweets
+
+getTweetService :: Connection -> Int -> IO Tweet
+getTweetService conn id = do
+    tweet <- getTweetRepository conn id
+    return tweet

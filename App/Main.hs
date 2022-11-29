@@ -11,6 +11,7 @@ import Services.TweetService
 main:: IO()
 main = do
     conn <- iniciandoDatabase
-    tweets <- getLastTweet conn "usuario1"
-    mostrarTweets tweets 
-    print "endinger.........."
+    --tweets <- getLastTweet conn "usuario1"
+    --mostrarTweets tweets 
+    menuInicial
+    print "\ns"

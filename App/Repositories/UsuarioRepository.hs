@@ -4,13 +4,13 @@ import Database.PostgreSQL.Simple
 import System.IO.Error
 import Control.Exception
 
-cadastrarUsuario:: Connection -> String -> String -> IO ()
+cadastrarUsuario :: Connection -> String -> String -> IO ()
 cadastrarUsuario conn nome senha  = do
     let q = "insert into usuarios (id, senha) values (?,?)"
     execute conn q (nome, senha)
     return ()
 
-registerUser:: Connection -> String -> String -> IO ()
+registerUser :: Connection -> String -> String -> IO ()
 registerUser conn name password = do
     {catch (cadastrarUsuario conn name password) handler;}
     where
@@ -20,7 +20,6 @@ registerUser conn name password = do
             putStrLn "Pressione qualquer botão para voltar ao menu inicial..."
             aux <- getLine
             return ()
-
 
 seguirAmigo:: Connection -> String -> String -> IO ()
 seguirAmigo conn nome1 nome2 = do
@@ -68,3 +67,15 @@ validarSenha conn login = do
     let q = "select senha from usuarios where id=?"
     [Only senha] <- query conn q (Only login)
     return senha
+
+getSeguindo :: Connection -> String -> IO String
+getSeguindo conn login = do
+    let q = "select idSeguido from seguidores where id=?"
+    [Only seguidores] <- query conn q (Only login)
+    return seguidores
+
+getSeguidores :: Connection -> String -> IO String
+getSeguidores conn login = do
+    let q = "select id from seguidores where idSeguido=?"
+    [Only seguidores] <- query conn q (Only login)
+    return seguidores
