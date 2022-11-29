@@ -6,6 +6,7 @@ import Repositories.TweetRepository
 import Data.Time.Clock
 import Data.Time.Clock.POSIX
 import Data.Int
+import Models.Tweet
 
 -- criarTweetService :: Connection -> String -> String -> IO ()
 -- criarTweetService conn login conteudo = do
@@ -18,6 +19,16 @@ criarTweetService login conn conteudo time = do
     criarTweet conn login conteudo (timeInt time) False
     return ()
 
+-- criarRespostaService :: String -> Connection -> String -> UTCTime -> IO () 
+-- criarTweetService login conn conteudo time = do
+--     criarTweet conn login conteudo (timeInt time) False
+--     return ()
+
+mostrarTweets:: [Tweet] -> IO()
+mostrarTweets [] = print " "
+mostrarTweets (x:xs) = do
+    exibeTweet x
+    mostrarTweets xs
 
 timeInt :: UTCTime -> Int
 timeInt = floor . (1e9 *) . nominalDiffTimeToSeconds . utcTimeToPOSIXSeconds

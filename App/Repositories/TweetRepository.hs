@@ -106,3 +106,18 @@ getRespostas conn idTweet= do
                 \where RespostasTweet.idTweetPrincipal = ?\
                 \order by timeStamp desc"        
     query conn q [idTweet]:: IO [Tweet]
+
+getLastTweet:: Connection -> String -> IO [Tweet]
+getLastTweet conn user = do
+    let q = "select Tweets.id, \
+                \Tweets.idTweet, \
+                \Tweets.conteudo, \
+                \Tweets.curtidas, \
+                \Tweets.timeStamp, \
+                \Tweets.isResposta, \
+                \Tweets.nRespostas \
+                \from Tweets \
+                \where id = ?\
+                \order by timeStamp desc \
+                \limit 5"        
+    query conn q [user]:: IO [Tweet]

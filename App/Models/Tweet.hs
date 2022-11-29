@@ -9,7 +9,7 @@ module Models.Tweet where
 		idTweet:: Int,
         conteudo:: String,
         curtidas:: Int,
-        timeStamp:: Int,
+        timeStamp:: Integer,
         isResposta:: Bool,
         nRespostas:: Int
     } deriving (Show, Read, Generic, FromRow)
