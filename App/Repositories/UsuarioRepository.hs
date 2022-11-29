@@ -1,12 +1,26 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Repositories.UsuarioRepository where
 import Database.PostgreSQL.Simple
+import System.IO.Error
+import Control.Exception
 
 cadastrarUsuario:: Connection -> String -> String -> IO ()
 cadastrarUsuario conn nome senha  = do
     let q = "insert into usuarios (id, senha) values (?,?)"
     execute conn q (nome, senha)
     return ()
+
+registerUser:: Connection -> String -> String -> IO ()
+registerUser conn name password = do
+    {catch (cadastrarUsuario conn name password) handler;}
+    where
+        handler :: SqlError -> IO ()
+        handler e = do
+            putStrLn "Usuário já cadastrado!"
+            putStrLn "Pressione qualquer botão para voltar ao menu inicial..."
+            aux <- getLine
+            return ()
+
 
 seguirAmigo:: Connection -> String -> String -> IO ()
 seguirAmigo conn nome1 nome2 = do

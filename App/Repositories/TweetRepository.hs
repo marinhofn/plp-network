@@ -2,8 +2,9 @@
 module Repositories.TweetRepository where
 import Database.PostgreSQL.Simple
 import Models.Tweet
+import Data.Time.Clock
 
-criarTweet:: Connection -> String -> String -> Int -> Bool -> IO ()
+criarTweet:: Connection -> String -> String -> UTCTime -> Bool -> IO ()
 criarTweet conn idUsuario conteudo timeStamp isResposta  = do
     let q = "insert into tweets (id, conteudo, timeStamp, isResposta) values (?, ?, ?, ?)"
     execute conn q (idUsuario, conteudo, timeStamp, isResposta)

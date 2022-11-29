@@ -3,10 +3,13 @@ module Services.UsuarioService where
 import Database.PostgreSQL.Simple
 import LocalDB.ConnectionDB
 import Repositories.UsuarioRepository
+import Repositories.TweetRepository
+import Models.Tweet
 
 realizarCadastro :: Connection -> String -> String -> IO ()
 realizarCadastro conn nome senha = do
-    cadastrarUsuario conn nome senha
+    --cadastrarUsuario conn nome senha
+    registerUser conn nome senha
     putStrLn "Cadastro efetuado com sucesso!"
     putStrLn "Pressione qualquer botão para voltar ao menu inicial..."
     aux <- getLine
@@ -33,3 +36,6 @@ validarLogin conn login senha = do
         return True
     else do
         return False
+
+listarTweetsUsuario :: Connection -> String -> IO [Tweet]
+listarTweetsUsuario conn login = getTweetsUsuario conn login

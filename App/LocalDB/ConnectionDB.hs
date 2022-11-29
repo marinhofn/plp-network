@@ -5,10 +5,10 @@ import Database.PostgreSQL.Simple
 
 localDB:: ConnectInfo
 localDB = defaultConnectInfo {
-    connectHost = "localhost",
-    connectDatabase = "a-rede-social",
-    connectUser = "postgres",
-    connectPassword = "postgres",
+    connectHost = "ec2-34-235-31-124.compute-1.amazonaws.com",
+    connectDatabase = "d8ddtvfbc4p82v",
+    connectUser = "zitnbbknhqmyvp",
+    connectPassword = "31836320ffbd891415ac92b1d73ceae9d16a5a7c8b4ffa482a646a5abc8ac433",
     connectPort = 5432
 }
 
