@@ -1,6 +1,6 @@
--- TODO
 
-module Services.UsuarioService where
+
+module Services.TweetService where
 import Database.PostgreSQL.Simple
 import LocalDB.ConnectionDB
 import Repositories.UsuarioRepository

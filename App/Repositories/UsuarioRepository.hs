@@ -28,11 +28,34 @@ seguirAmigo conn nome1 nome2 = do
     execute conn q (nome1, nome2)
     return ()
 
+followFriend:: Connection -> String -> String -> IO ()
+followFriend conn nome1 nome2 = do
+    {catch (seguirAmigo conn nome1 nome2) handler;}
+    where
+        handler :: SqlError -> IO ()
+        handler e = do
+            putStrLn "Usuário inexistente!"
+            putStrLn "Pressione qualquer botão para voltar ao menu inicial..."
+            aux <- getLine
+            return ()
+
+
 abandonarAmigo:: Connection -> String -> String -> IO ()
 abandonarAmigo conn nome1 nome2 = do
     let q = "delete from seguidores where id=? and idSeguido=?"
     execute conn q (nome1, nome2)
     return ()
+
+unfollowFriend:: Connection -> String -> String -> IO ()
+unfollowFriend conn nome1 nome2 = do
+    {catch (abandonarAmigo conn nome1 nome2) handler;}
+    where
+        handler :: SqlError -> IO ()
+        handler e = do
+            putStrLn "Usuário inexistente!"
+            putStrLn "Pressione qualquer botão para voltar ao menu inicial..."
+            aux <- getLine
+            return ()
 
 validarUsuario :: Connection -> String -> IO String
 validarUsuario conn login = do

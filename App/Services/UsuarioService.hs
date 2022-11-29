@@ -37,5 +37,5 @@ validarLogin conn login senha = do
     else do
         return False
 
-listarTweetsUsuario :: Connection -> String -> IO [Tweet]
-listarTweetsUsuario conn login = getTweetsUsuario conn login
+-- listarTweetsUsuario :: Connection -> String -> IO [Tweet]
+-- listarTweetsUsuario conn login = getTweetsUsuario conn login
