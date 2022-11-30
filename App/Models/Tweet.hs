@@ -48,5 +48,5 @@ module Models.Tweet where
         --putStrLn $ show (getTimeStampUTC t) ++ show (getTimeStamp t)        
         putStrLn $ "    |   Curtidas:   " ++ show (getCurtidas t)
         putStrLn $ "    |   Respostas:  " ++ show (getNumRespostas t)
-        putStrLn "\n"
+        putStrLn ""
 

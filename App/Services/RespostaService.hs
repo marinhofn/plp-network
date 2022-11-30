@@ -5,6 +5,7 @@ import Repositories.TweetRepository
 import Repositories.RespostaRepository
 import Data.Time.Clock
 import Data.Time.Clock.POSIX
+import Services.TweetService
 
 addResponseService:: Connection -> String -> String -> UTCTime -> Int -> IO () 
 addResponseService conn id conteudo time idTweet = do
@@ -22,8 +23,8 @@ getTweetWithResponsesService conn idTweet = do
     tweets <- getRespostas conn idTweet
     return(tweet ++ tweets)
 
-timeInt :: UTCTime -> Int
-timeInt = floor . (1e9 *) . nominalDiffTimeToSeconds . utcTimeToPOSIXSeconds
+-- timeInt :: UTCTime -> Int
+-- timeInt = floor . (1e9 *) . nominalDiffTimeToSeconds . utcTimeToPOSIXSeconds
 
 validacao:: Connection -> Int -> IO Bool
 validacao conn idTweet = do

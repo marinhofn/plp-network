@@ -17,3 +17,6 @@ removeCurtidaService conn id idTweetCurtido = do
     let tweet = head tweeet
     diminuiNumeroCurtida conn (getidUsuario tweet) idTweetCurtido
     removeCurtida conn (getidUsuario tweet) idTweetCurtido
+
+getMinhasCurtidas:: Connection -> String -> IO [Tweet]
+getMinhasCurtidas conn login = getTweetsCurtidos conn login
