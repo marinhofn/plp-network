@@ -4,36 +4,49 @@
 module Models.Tweet where
     import GHC.Generics (Generic)
     import Database.PostgreSQL.Simple (FromRow)
+    import Data.Time.Clock.POSIX
+    import Data.Time.Clock
+
     data Tweet = Tweet {
         idUsuario:: String,
 		idTweet:: Int,
         conteudo:: String,
         curtidas:: Int,
-        timeStamp:: Int,
+        timeStamp:: Integer,
         isResposta:: Bool,
         nRespostas:: Int
     } deriving (Show, Read, Generic, FromRow)
     
+    getIsResposta:: Tweet -> Bool
+    getIsResposta a = isResposta a
 
     getidUsuario:: Tweet -> String
-    getidUsuario a = idUsuario a
+    getidUsuario t = idUsuario t
 
     getId:: Tweet -> Int
-    getId a = idTweet a
+    getId t = idTweet t
 
-    getTweet:: Tweet -> String
-    getTweet a = conteudo a
+    getConteudo:: Tweet -> String
+    getConteudo t = conteudo t
 
     getCurtidas:: Tweet -> Int
-    getCurtidas a = curtidas a
+    getCurtidas t = curtidas t
 
     getNumRespostas:: Tweet -> Int
-    getNumRespostas a = nRespostas a
+    getNumRespostas t = nRespostas t
+
+    getTimeStamp:: Tweet -> Integer
+    getTimeStamp t = timeStamp t
+
+    getTimeStampUTC :: Tweet -> UTCTime
+    getTimeStampUTC t = posixSecondsToUTCTime (fromInteger (getTimeStamp t))
 
     exibeTweet:: Tweet -> IO()
-    exibeTweet a = do
-        putStrLn $ getidUsuario a
-        putStrLn $ getTweet a
-        putStrLn $ "Curtidas: " ++ show (getCurtidas a)
-        putStrLn $ "Respostas:" ++ show (getNumRespostas a)
-        putStrLn "--------"
+    exibeTweet t = do
+        putStrLn $ "    |   " ++ getidUsuario t ++ " -> " ++ show (getId t) ++ "\n    |   "
+        putStrLn $ "    |   " ++ getConteudo t ++ "\n    |   "
+        --putStrLn $ show (getTimeStampUTC t) ++ show (getTimeStamp t)        
+        putStrLn $ "    |   Curtidas:   " ++ show (getCurtidas t)
+        putStrLn $ "    |   Respostas:  " ++ show (getNumRespostas t)
+        putStrLn ""
+

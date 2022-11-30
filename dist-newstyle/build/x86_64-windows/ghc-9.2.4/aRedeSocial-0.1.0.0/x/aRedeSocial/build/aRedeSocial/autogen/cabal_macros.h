@@ -10,6 +10,16 @@
   (major1) == 0 && (major2) <  1 || \
   (major1) == 0 && (major2) == 1 && (minor) <= 0)
 #endif /* MIN_VERSION_aRedeSocial */
+/* package ansi-terminal-0.11.4 */
+#ifndef VERSION_ansi_terminal
+#define VERSION_ansi_terminal "0.11.4"
+#endif /* VERSION_ansi_terminal */
+#ifndef MIN_VERSION_ansi_terminal
+#define MIN_VERSION_ansi_terminal(major1,major2,minor) (\
+  (major1) <  0 || \
+  (major1) == 0 && (major2) <  11 || \
+  (major1) == 0 && (major2) == 11 && (minor) <= 4)
+#endif /* MIN_VERSION_ansi_terminal */
 /* package base-4.16.3.0 */
 #ifndef VERSION_base
 #define VERSION_base "4.16.3.0"
@@ -30,6 +40,26 @@
   (major1) == 0 && (major2) <  6 || \
   (major1) == 0 && (major2) == 6 && (minor) <= 5)
 #endif /* MIN_VERSION_postgresql_simple */
+/* package process-1.6.13.2 */
+#ifndef VERSION_process
+#define VERSION_process "1.6.13.2"
+#endif /* VERSION_process */
+#ifndef MIN_VERSION_process
+#define MIN_VERSION_process(major1,major2,minor) (\
+  (major1) <  1 || \
+  (major1) == 1 && (major2) <  6 || \
+  (major1) == 1 && (major2) == 6 && (minor) <= 13)
+#endif /* MIN_VERSION_process */
+/* package time-1.11.1.1 */
+#ifndef VERSION_time
+#define VERSION_time "1.11.1.1"
+#endif /* VERSION_time */
+#ifndef MIN_VERSION_time
+#define MIN_VERSION_time(major1,major2,minor) (\
+  (major1) <  1 || \
+  (major1) == 1 && (major2) <  11 || \
+  (major1) == 1 && (major2) == 11 && (minor) <= 1)
+#endif /* MIN_VERSION_time */
 
 /* tool gcc-10.2.0 */
 #ifndef TOOL_VERSION_gcc

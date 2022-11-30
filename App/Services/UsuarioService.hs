@@ -5,6 +5,7 @@ import LocalDB.ConnectionDB
 import Repositories.UsuarioRepository
 import Repositories.TweetRepository
 import Models.Tweet
+import Models.Usuario
 
 realizarCadastro :: Connection -> String -> String -> IO ()
 realizarCadastro conn nome senha = do
@@ -18,13 +19,11 @@ realizarCadastro conn nome senha = do
 
 getUsuario :: Connection -> String -> IO String
 getUsuario conn login = do
-    putStrLn "Validando Usuário..."
     nome <- validarUsuario conn login
     return nome
 
 getSenha :: Connection -> String -> IO String
 getSenha conn login = do
-    putStrLn "Validando Senha..."
     senha <- validarSenha conn login
     return senha
 
@@ -37,5 +36,17 @@ validarLogin conn login senha = do
     else do
         return False
 
-listarTweetsUsuario :: Connection -> String -> IO [Tweet]
-listarTweetsUsuario conn login = getTweetsUsuario conn login
+mostrarSeguindo :: Connection -> String -> IO [Usuario]
+mostrarSeguindo conn login = getSeguindo conn login
+
+seguir :: Connection -> String -> String -> IO()
+seguir conn login nome = do
+    followFriend conn login nome
+    --putStrLn "Seguindo com sucesso!"
+    putStrLn "Pressione qualquer botão para voltar ao menu inicial..."
+    return ()
+
+mostrarSeguidores :: Connection -> String -> IO [Usuario]
+mostrarSeguidores conn login = getSeguidores conn login
+    -- seguidores <- getSeguidores conn login
+    -- print seguidores
