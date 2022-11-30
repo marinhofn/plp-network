@@ -3,6 +3,8 @@ import Database.PostgreSQL.Simple
 import LocalDB.ConnectionDB
 import Repositories.UsuarioRepository
 import Repositories.TweetRepository
+import Services.CurtidaService
+import Services.RespostaService
 
 import Data.Time.Clock
 import Data.Time.Clock.POSIX
@@ -153,36 +155,36 @@ verTimeLine conn login = do
     tweets <- getTimeLine conn login
     mostrarTweets tweets
 
-    idTweet <- getLine
+    id <- getLine
+    let idTweet = read id:: Int
     acessarTweetFromTimeline conn login idTweet
 
     menuUsuario login conn
 
-acessarTweetFromTimeline :: Connection -> String -> String -> IO()
+acessarTweetFromTimeline :: Connection -> String -> Int -> IO()
 acessarTweetFromTimeline conn login idTweet = do
     clearScreen
     title
     tweet <- getTweetService conn idTweet
-    mostrarTweets tweet    
+    getTweetWithResponsesService conn (getId tweet)    
     putStrLn "1 - Curtir    2 - Responder    3 - Voltar"
     op <- getLine
     timelineMenu conn login op idTweet
 
     menuUsuario login conn
 
-timelineMenu :: Connection -> String -> String -> String -> IO()
+timelineMenu :: Connection -> String -> String -> Int -> IO()
 timelineMenu conn login op idTweet
     | op == "1" = curtirTweet conn login idTweet
-    | op == "2" = responderTweet conn login idTweet
+    -- | op == "2" = responderTweet conn login idTweet
     | op == "3" = menuUsuario login conn
-    | othwerwise = do
+    | otherwise = do
         putStrLn "Opção inválida!"
         menuUsuario login conn
 
-curtirTweet :: Connection -> String -> String -> IO()
+curtirTweet :: Connection -> String -> Int -> IO()
 curtirTweet conn login idTweet = do
-    let idTweetInt = read idTweet :: Int
-    addCurtida conn login idTweetInt
+    addCurtida conn login idTweet
     acessarTweetFromTimeline conn login idTweet 
     aux <- getLine
     menuUsuario login conn

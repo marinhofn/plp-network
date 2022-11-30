@@ -12,6 +12,6 @@ main:: IO()
 main = do
     conn <- iniciandoDatabase
     --tweets <- getLastTweet conn "usuario1"
-    --mostrarTweets tweets 
+    --mostrarTweets tweets  
     menuInicial
     print "\ns"

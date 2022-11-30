@@ -17,14 +17,17 @@ module Models.Tweet where
         nRespostas:: Int
     } deriving (Show, Read, Generic, FromRow)
     
+    getIsResposta:: Tweet -> Bool
+    getIsResposta a = isResposta a
+
     getidUsuario:: Tweet -> String
     getidUsuario t = idUsuario t
 
     getId:: Tweet -> Int
     getId t = idTweet t
 
-    getTweet:: Tweet -> String
-    getTweet t = conteudo t
+    getConteudo:: Tweet -> String
+    getConteudo t = conteudo t
 
     getCurtidas:: Tweet -> Int
     getCurtidas t = curtidas t
@@ -41,7 +44,7 @@ module Models.Tweet where
     exibeTweet:: Tweet -> IO()
     exibeTweet t = do
         putStrLn $ "    |   " ++ getidUsuario t ++ " -> " ++ show (getId t) ++ "\n    |   "
-        putStrLn $ "    |   " ++ getTweet t ++ "\n    |   "
+        putStrLn $ "    |   " ++ getConteudo t ++ "\n    |   "
         --putStrLn $ show (getTimeStampUTC t) ++ show (getTimeStamp t)        
         putStrLn $ "    |   Curtidas:   " ++ show (getCurtidas t)
         putStrLn $ "    |   Respostas:  " ++ show (getNumRespostas t)
