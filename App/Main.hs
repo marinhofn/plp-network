@@ -13,4 +13,4 @@ main:: IO()
 main = do
     conn <- iniciandoDatabase  
     menuInicial conn
-    putStrLn ""
+    putStrLn "aaaaaaaaaaaaaaa"

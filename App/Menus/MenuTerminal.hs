@@ -27,12 +27,6 @@ title = do
     putStrLn  "         |__|____||_____||____||________||_____||__|  |__|__|"
     putStrLn  "\n"                                                     
 
--- title :: IO()
--- title = do
---     setCursorPosition 5 0
---     putStrLn "\nTWEETTER\n"
-    
--- Menu
 menuInicial :: Connection -> IO()
 menuInicial conn = do
     clearScreen
@@ -140,10 +134,51 @@ criarTweetMenu login conn = do
 verTweets :: Connection -> String -> IO()
 verTweets conn login = do
 
-    putStrLn "\nTweets: \n"    
+    putStrLn "\nTweets: \n" 
     tweets <- getTweetsUsuario conn login
     mostrarTweets tweets
-    x <- getLine
+
+    id <- getLine
+    let idTweet = read id:: Int
+
+    acessarEdicaoTweet conn login idTweet
+
+    menuUsuario login conn
+
+acessarEdicaoTweet :: Connection -> String -> Int -> IO()
+acessarEdicaoTweet conn login idTweet = do
+    clearScreen
+    title
+
+    x <- getTweetWithResponsesService conn idTweet
+
+    mostrarTweets x
+
+    putStrLn "1 - Editar    2 - Excluir    3 - Voltar"
+    op <- getLine
+    menuEdicao conn login op idTweet
+
+    menuUsuario login conn
+
+menuEdicao :: Connection -> String -> String -> Int -> IO()
+menuEdicao conn login op idTweet
+    | op == "1" = editaTweet conn login idTweet
+    | op == "2" = excluirTweet conn login idTweet
+    | op == "3" = menuUsuario login conn
+    | otherwise = do
+        putStrLn "Opção inválida!"
+        menuUsuario login conn
+
+editaTweet:: Connection -> String -> Int -> IO()
+editaTweet conn login idTweet = do
+    putStrLn "Digite o conteúdo do tweet: "
+    conteudo <- getLine
+    updateTweetService conn login idTweet conteudo
+    menuUsuario login conn
+
+excluirTweet:: Connection -> String -> Int -> IO()
+excluirTweet conn login idTweet = do
+    deleteTweetService conn login idTweet
     menuUsuario login conn
 
 verTimeLine :: Connection -> String -> IO()
