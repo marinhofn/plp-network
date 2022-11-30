@@ -146,7 +146,6 @@ verTweets conn login = do
     x <- getLine
     menuUsuario login conn
 
--- TODO: Adicionar operação de selecionar tweet
 verTimeLine :: Connection -> String -> IO()
 verTimeLine conn login = do
     clearScreen
