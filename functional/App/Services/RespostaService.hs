@@ -3,7 +3,7 @@ import Database.PostgreSQL.Simple
 import Models.Tweet
 import Repositories.TweetRepository
 import Repositories.RespostaRepository
-import Data.Time.Clock
+import Data.Time.Clock 
 import Data.Time.Clock.POSIX
 import Services.TweetService
 
