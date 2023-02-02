@@ -1,6 +1,6 @@
-:- use_module('Menu.pl', [menuInicial/0]).
+:- use_module('util/functionsUser.pl').
+:- use_module('util/functionsTweets.pl').
 
 main() :-
-    % prompt(_, ''),
-    writeln('?'),
-    menuInicial().
+    write("aaaaaa"),
+    exibirMinhaTimeLine("usuario1").

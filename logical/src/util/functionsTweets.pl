@@ -1,6 +1,6 @@
-:- module(tweet, [addTweet/2, exibirTweets/1, editarTextoTweet/2, removerTweet/2, addCurtida/2, addResposta/3, exibirMeusTweets/1, exibirMinhasCurtidas/1]).
+:- module(functionsTweets, [addTweet/2, exibirTweets/1, editarTextoTweet/2, removerTweet/2, addCurtida/2, addResposta/3, exibirMeusTweets/1, exibirMinhasCurtidas/1, exibirMinhaTimeLine/1]).
 :- use_module(library(http/json)).
-:- use_module('usuario.pl').
+:- use_module('functionsUser.pl').
 
 % Fato dinâmico para gerar o id
 id(0).
@@ -38,11 +38,11 @@ tweetsToJSON([H|T], [X|Out]) :-
 % Salvar em arquivo JSON
 addTweet(Nome, Texto) :- 
     id(ID), incrementa_id,
-    lerJSON('database/tweets.json', File),
+    lerJSON('util/database/tweets.json', File),
     tweetsToJSON(File, ListaTweetsJSON),
     tweetToJSON(Nome, ID, Texto, 0, 0, "", TweetJSON),
     append(ListaTweetsJSON, [TweetJSON], Saida),
-    open('database/tweets.json', write, Stream), write(Stream, Saida), close(Stream).
+    open('util/database/tweets.json', write, Stream), write(Stream, Saida), close(Stream).
 
 % Mudando o texto de um tweet
 editarTextoTweet([], _, _, []).
@@ -51,12 +51,12 @@ editarTextoTweet([H|T], Id, Texto, [H|Out]) :-
 	editarTextoTweet(T, Id, Texto, Out).
 
 editarTextoTweet(IdAgente, NovoNome) :-
-    lerJSON('database/tweets.json', File),
+    lerJSON('util/database/tweets.json', File),
     editarTextoTweet(File, IdAgente, NovoNome, SaidaParcial),
     tweetsToJSON(SaidaParcial, Saida),
     writeln(NovoNome),
-    exibirTweets('database/tweets.json'),
-    open('database/tweets.json', write, Stream), write(Stream, Saida), close(Stream).
+    exibirTweets('util/database/tweets.json'),
+    open('util/database/tweets.json', write, Stream), write(Stream, Saida), close(Stream).
 
 % Removendo agente
 removerTweet([], _, []).
@@ -76,11 +76,11 @@ addCurtida([H|T], H.id, [_{nome:H.nome, id:H.id, texto:H.texto, nCurtidas: Y, nR
 addCurtida([H|T], Id, [H|Out]) :- addCurtida(T, Id, Out).
 
 addCurtida(IdTweet, Login) :-
-    lerJSON('database/tweets.json', File),
+    lerJSON('util/database/tweets.json', File),
     addCurtidaUsuario(Login, IdTweet),
     addCurtida(File, IdTweet, SaidaParcial),
     tweetsToJSON(SaidaParcial, Saida),
-    open('database/tweets.json', write, Stream), write(Stream, Saida), close(Stream).
+    open('util/database/tweets.json', write, Stream), write(Stream, Saida), close(Stream).
 
 
 % Mudando o texto de um tweet
@@ -90,10 +90,10 @@ addNResposta([H|T], H.id, [_{nome:H.nome, id:H.id, texto:H.texto, nCurtidas: H.n
 addNResposta([H|T], Id, [H|Out]) :- addNResposta(T, Id, Out).
 
 addNResposta(IdTweet) :-
-    lerJSON('database/tweets.json', File),
+    lerJSON('util/database/tweets.json', File),
     addNResposta(File, IdTweet, SaidaParcial),
     tweetsToJSON(SaidaParcial, Saida),
-    open('database/tweets.json', write, Stream), write(Stream, Saida), close(Stream).
+    open('util/database/tweets.json', write, Stream), write(Stream, Saida), close(Stream).
 
 addResposta([], _, _, []).
 addResposta([H|T], H.id, IdResposta, [_{nome:H.nome, id:H.id, texto:H.texto, nCurtidas: H.nCurtidas, nRespostas: H.nRespostas, respostas: Y}|T]) :- 
@@ -104,10 +104,10 @@ addResposta(Nome, Texto, IdRespondido) :-
     addTweet(Nome, Texto),
     id(ID), writeln(ID),
     addNResposta(IdRespondido),
-    lerJSON('database/tweets.json', File),
+    lerJSON('util/database/tweets.json', File),
     addResposta(File, IdRespondido, ID, SaidaParcial),
     tweetsToJSON(SaidaParcial, Saida),
-    open('database/tweets.json', write, Stream), write(Stream, Saida), close(Stream).
+    open('util/database/tweets.json', write, Stream), write(Stream, Saida), close(Stream).
 
 
 % Mudando o texto de um tweet
@@ -117,7 +117,7 @@ meusTweets([_|T], Nome, Out) :- meusTweets(T, Nome, Out).
 
 
 exibirMeusTweets(Nome) :-
-    lerJSON('database/tweets.json', File),
+    lerJSON('util/database/tweets.json', File),
     meusTweets(File, Nome, Lista),
     reverse(Lista, Saida),
     exibirTweetsAux(Saida).
@@ -130,14 +130,14 @@ minhasCurtidas([_|T], ListaCurtidos, Out) :- minhasCurtidas(T, ListaCurtidos, Ou
 
 exibirMinhasCurtidas(Login) :-
     listaCurtidas(Login, Lista),
-    lerJSON('database/tweets.json', File),
+    lerJSON('util/database/tweets.json', File),
     minhasCurtidas(File, Lista, Out),
     reverse(Out, Saida),
     exibirTweetsAux(Saida).
 
 exibirMinhaTimeLine(Login) :-
     listaSeguidores(Login, Lista),
-    lerJSON('database/tweets.json', File),
+    lerJSON('util/database/tweets.json', File),
     meusSeguidores(File, Lista, Out),
     reverse(Out, Saida),
     exibirTweetsAux(Saida).
