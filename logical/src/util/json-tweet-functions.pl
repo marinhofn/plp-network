@@ -134,3 +134,14 @@ exibirMinhasCurtidas(Login) :-
     minhasCurtidas(File, Lista, Out),
     reverse(Out, Saida),
     exibirTweetsAux(Saida).
+
+exibirMinhaTimeLine(Login) :-
+    listaSeguidores(Login, Lista),
+    lerJSON('database/tweets.json', File),
+    meusSeguidores(File, Lista, Out),
+    reverse(Out, Saida),
+    exibirTweetsAux(Saida).
+
+meusSeguidores([], _, []).
+meusSeguidores([H|T], ListaSeguidores, [H|Out]) :- member(H.nome, ListaSeguidores), meusSeguidores(T, ListaSeguidores, Out).
+meusSeguidores([_|T], ListaSeguidores, Out) :- meusSeguidores(T, ListaSeguidores, Out).
