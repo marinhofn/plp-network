@@ -2,6 +2,7 @@
 :- module('Menu', [menuInicial/0]).
 :- use_module('util/functionsUser.pl').
 :- use_module('util/functionsTweets.pl').
+:- use_module('util/input.pl',[input/1]).
 
 menuInicial() :- 
     writeln('1 - Login'), nl,
@@ -17,25 +18,20 @@ menuInicial() :-
     ).
   
 loginTerminal :-
-    writeln('Login not implemented yet!').
     writeln('Digite seu login: '),
     read(Login),
     writeln('Digite sua senha: '),
     read(Senha),
-    validarLogin(Login, Senha).
-% implementar validação de login
-%validarLogin(Login, Senha) :-
+    %validarLogin(Login, Senha),
+    menuUsuario(Login).
   
 cadastroTerminal :-
-    writeln('Cadastro not implemented yet!').
     writeln('Digite o nome de usuário que deseja utilizar: '),
     read(Login),
     writeln('Digite a senha: '),
     read(Senha),
-    criarUsuario(Login, Senha).
-    
-menuLogin() :-
-    writeln("\nMenu   working!").
+    addUsuario(Login, Senha),
+    menuInicial().
 
 menuUsuario(Login) :-
     writeln("1 - Criar um novo tweet"),
@@ -55,19 +51,22 @@ menuUsuario(Login) :-
         Option =:= 5 -> verTimeline(Login);
         Option =:= 6 -> seguir(Login);
         Option =:= 7 -> verCurtidas(Login);
-        Option =:= 8 -> menuInicial();
+        Option =:= 8 -> loginTerminal();
         writeln('Opção inválida!'), nl,
         menuUsuario(Login)
     ).
   
-criarTweetMenu(Login) :-
-    writeln('Digite o texto do tweet: '),
+
+
+criarTweet(Login) :-
+    writeln('Digite o texto do tweet: '), nl,
     read(Texto),
     addTweet(Login, Texto),
     writeln('Tweet publicado!'),
     writeln('Pressione qualquer tecla para voltar ao menu inicial.'),
     read(Aux),
     menuUsuario(Login).
+
 
 verTweets(Login) :- 
     writeln('Tweets:'),
@@ -96,18 +95,33 @@ acessarTweetFromTimeline(Login, IDTweet) :-
         menuUsuario(Login)
     ).
 
+verCurtidas(Login) :-
+    writeln('\nCurtidas: '),
+    exibirMinhasCurtidas(Login),
+    writeln('\nPressione qualquer tecla para voltar ao menu inicial.\n'),
+    read(Aux),
+    menuUsuario(Login).
+
 curtirTweet(Login, IDTweet) :-
     addCurtida(IDTweet, Login),
-    writeln('Tweet curtido!').
+    writeln('\nTweet curtido!\n').
 
 responderTweet(Login, IDTweet) :-
-    writeln('Digite o texto da resposta: '),
+    writeln('\nDigite o texto da resposta: '),
     read(Texto),
     addResposta(Login, Texto, IDTweet),
-    writeln('Resposta publicada!').
+    writeln('\nResposta publicada!\n').
 
 seguir(Login) :-
     writeln('Digite o nome de usuário que deseja seguir: '),
-    read(LoginAmigo),
-    addSeguidor(Login, LoginAmigo),
-    writeln('Seguindo!').
+    read(LoginAmigoString),
+    addSeguidor(Login, LoginAmigoString),
+    writeln('Seguindo!'),
+    menuUsuario(Login).
+
+verSeguidores(Login) :-
+    writeln('Seguidores: '),
+    listaSeguidores(Login),
+    writeln('Pressione qualquer tecla para voltar ao menu inicial.'),
+    read(Aux),
+    menuUsuario(Login).

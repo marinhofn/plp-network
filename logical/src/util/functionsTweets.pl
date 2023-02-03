@@ -1,4 +1,4 @@
-:- module(functionsTweets, [addTweet/2, editarTextoTweet/2, removerTweet/2, addCurtida/2, addResposta/3, exibirMeusTweets/1, exibirMinhasCurtidas/1, exibirMinhaTimeLine/1, exibirTweetComRespostas/1]).
+:- module(functionsTweets, [addTweet/2, editarTextoTweet/2, removerTweet/1, addCurtida/2, addResposta/3, exibirMeusTweets/1, exibirMinhasCurtidas/1, exibirMinhaTimeLine/1, exibirTweetComRespostas/1]).
 :- use_module(library(http/json)).
 :- use_module('functionsUser.pl').
 

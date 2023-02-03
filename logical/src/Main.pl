@@ -4,4 +4,4 @@
 
 main() :-
     %prompt(_, ''),
-    menuPrincipal().
+    menuInicial().
