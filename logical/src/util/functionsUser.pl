@@ -48,7 +48,9 @@ addCurtida([H|T], Login, IdCurtido, [H|Out]) :-
 
 addCurtidaUsuario(Login, IdCurtido) :-
     readJSON('util/database/usuarios.json', File),
-    addCurtida(File, Login, IdCurtido, SaidaParcial),
+    atom_string(Login, LoginString),
+    atom_string(IdCurtido, IdCurtidoString),
+    addCurtida(File, LoginString, IdCurtidoString, SaidaParcial),
     usuariosToJSON(SaidaParcial, Saida),
     open('util/database/usuarios.json', write, Stream), write(Stream, Saida), close(Stream).
 
@@ -59,7 +61,7 @@ getUsuario([_|T], Login, Out) :-
 
 listaCurtidas(Login, L) :-
     readJSON('util/database/usuarios.json', File),
-    getUsuario(File, LoginString, Out),
+    getUsuario(File, Login, Out),
     split_string(Out.curtidas, "\s", "\s", L).
 
 
@@ -98,6 +100,7 @@ listaSeguidores(Login, L) :-
     readJSON('util/database/usuarios.json', File),
     getUsuario(File, Login, Out),
     split_string(Out.seguindo, "\s", "\s", L).
+
 
 
 showUsuario(Login) :-

@@ -151,12 +151,9 @@ minhasCurtidas([_|T], ListaCurtidos, Out) :- minhasCurtidas(T, ListaCurtidos, Ou
 
 exibirMinhasCurtidas(Login) :-
     atom_string(Login, LoginString),
-    writeln(Login),
     listaCurtidas(LoginString, Lista),
-    writeln(Lista),
     lerJSON('util/database/tweets.json', File),
     minhasCurtidas(File, Lista, Out),
-    writeln(Out),
     reverse(Out, Saida),
     exibirTweetsAux(Saida).
 

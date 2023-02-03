@@ -35,25 +35,25 @@ cadastroTerminal :-
     menuInicial().
 
 menuUsuario(Login) :-
-    writeln("1 - Criar um novo tweet"),
+    writeln("\n1 - Criar um novo tweet"),
     writeln("2 - Ver seus tweets"),
-    writeln("3 - Ver seus seguidores"),
-    writeln("4 - Ver quem você segue"),
+    writeln("3 - Deletar Tweet"),
+    writeln("4 - Ver quem voce segue"),
     writeln("5 - Ver timeline"),
-    writeln("6 - Seguir alguém"),
+    writeln("6 - Seguir alguem"),
     writeln("7 - Ver minhas curtidas"),
     writeln("8 - Deslogar\n"),
     read(Option),
     (
         Option =:= 1 -> criarTweet(Login);
         Option =:= 2 -> verTweets(Login);
-        Option =:= 3 -> verSeguidores(Login);
+        Option =:= 3 -> deletarTweet(Login);
         Option =:= 4 -> verSeguindo(Login);
         Option =:= 5 -> verTimeline(Login);
         Option =:= 6 -> seguir(Login);
         Option =:= 7 -> verCurtidas(Login);
-        Option =:= 8 -> loginTerminal();
-        writeln('Opção inválida!'), nl,
+        Option =:= 8 -> menuInicial();
+        writeln('Opção invalida!'), nl,
         menuUsuario(Login)
     ).
 
@@ -85,7 +85,7 @@ verTimeline(Login) :-
     menuUsuario(Login).
 
 acessarTweetTimeline(Login, IDTweet) :-
-    cls,
+    cls(),
     atom_string(IDTweet, IDTweetString),
     exibirTweetComRespostas(IDTweetString),
     writeln('1 - Curtir     2 - Responder       3 - Voltar'),
@@ -94,7 +94,7 @@ acessarTweetTimeline(Login, IDTweet) :-
         Option =:= 1 -> curtirTweet(Login, IDTweetString);
         Option =:= 2 -> responderTweet(Login, IDTweetString);
         Option =:= 3 -> menuUsuario(Login);
-        writeln('Opção inválida!'), nl,
+        writeln('Opção invalida!'), nl,
         menuUsuario(Login)
     ).
 
@@ -108,26 +108,36 @@ verCurtidas(Login) :-
 
 curtirTweet(Login, IDTweet) :-
     addCurtida(IDTweet, Login),
-    cls,
+    cls(),
     exibirTweetComRespostas(IDTweet).
 
 responderTweet(Login, IDTweet) :-
     writeln('\nDigite o texto da resposta: '),
     read(Texto),
     addResposta(Login, Texto, IDTweet),
-    cls,
+    cls(),
     exibirTweetComRespostas(IDTweet).
 
 seguir(Login) :-
+    cls(),
     writeln('Digite o nome de usuário que deseja seguir: '),
     read(Amigo),
     addSeguidor(Login, Amigo),
     writeln('Seguindo!'),
     menuUsuario(Login).
 
-verSeguidores(Login) :-
-    writeln('Seguidores: '),
-    listaSeguidores(Login),
+verSeguindo(Login) :-
+    writeln('\n'),
+    atom_string(Login, LoginString),
+    showUsuario(LoginString),
     writeln('Pressione qualquer tecla para voltar ao menu inicial.'),
     read(Aux),
+    menuUsuario(Login).
+
+deletarTweet(Login) :-
+    writeln('\nDigite o ID do tweet que deseja deletar: '),
+    read(IDTweet),
+    atom_string(IDTweet, IDTweetString),
+    removerTweet(IDTweetString),
+    writeln('Tweet deletado!'),
     menuUsuario(Login).
