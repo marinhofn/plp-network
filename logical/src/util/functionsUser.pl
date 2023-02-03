@@ -65,15 +65,15 @@ listaCurtidas(Login, L) :-
 
 addSeguidor([], _, _, []).
 addSeguidor([H|T], H.login, IdSeguido, [_{login:H.login, senha:H.senha, seguindo:Y, curtidas: H.curtidas}|T]) :- 
-    atom_concat(IdSeguido, " ", W), atom_concat(H.seguindo, W, Y),
-    writeln(Y).
+    atom_concat(IdSeguido, " ", W), atom_concat(H.seguindo, W, Y).
 addSeguidor([H|T], Login, IdCurtido, [H|Out]) :- 
 	addSeguidor(T, Login, IdCurtido, Out).
 
 addSeguidor(Login, IdSeguido) :-
-    writeln(Login), writeln(IdSeguido),
     readJSON('util/database/usuarios.json', File),
-    addSeguidor(File, Login, IdSeguido, SaidaParcial),
+    atom_string(Login, LoginString),
+    atom_string(IdSeguido, IdSeguidoString),
+    addSeguidor(File, LoginString, IdSeguidoString, SaidaParcial),
     usuariosToJSON(SaidaParcial, Saida),
     open('util/database/usuarios.json', write, Stream),
     write(Stream, Saida), close(Stream).
