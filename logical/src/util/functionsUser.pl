@@ -1,4 +1,4 @@
-:- module(functionsUser, [addUsuario/2, addCurtidaUsuario/2, addSeguidor/2, listaSeguidores/2]).
+:- module(functionsUser, [addUsuario/2, addCurtidaUsuario/2, addSeguidor/2, listaSeguidores/2, showUsuario/1]).
 :- use_module(library(http/json)).
 
 addUsuario(Login, Senha) :-
@@ -95,3 +95,18 @@ listaSeguidores(Login, L) :-
     readJSON('util/database/usuarios.json', File),
     getUsuario(File, Login, Out),
     split_string(Out.seguindo, "\s", "\s", L).
+
+
+showUsuario(Login) :-
+    readJSON('util/database/usuarios.json', File),
+    getUsuario(File, Login, Out),
+    write("Usuario: "), write(Out.login), nl,
+    write("Ele(a) segue: "), nl,
+    split_string(Out.seguindo, "\s", "\s", L),
+    showUsuarioAux(L).
+
+% acho que essa funcao sera usada apenas internamente para consultas
+showUsuarioAux([]) :- !.
+showUsuarioAux([H|T]) :-
+    write(H), nl,
+    showUsuarioAux(T).

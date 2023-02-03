@@ -2,5 +2,4 @@
 :- use_module('util/functionsTweets.pl').
 
 main() :-
-    write("aaaaaa"),
-    exibirMinhaTimeLine("usuario1").
+    showUsuario("usuario1").

@@ -1,4 +1,4 @@
-:- module(functionsTweets, [addTweet/2, exibirTweets/1, editarTextoTweet/2, removerTweet/2, addCurtida/2, addResposta/3, exibirMeusTweets/1, exibirMinhasCurtidas/1, exibirMinhaTimeLine/1]).
+:- module(functionsTweets, [addTweet/2, exibirTweets/1, editarTextoTweet/2, removerTweet/2, addCurtida/2, addResposta/3, exibirMeusTweets/1, exibirMinhasCurtidas/1, exibirMinhaTimeLine/1, exibirTweetComRespostas/1]).
 :- use_module(library(http/json)).
 :- use_module('functionsUser.pl').
 
@@ -19,7 +19,28 @@ exibirTweetsAux([H|T]) :-
 	write("Id:"), writeln(H.id),
     writeln(H.texto),
     write("Curtidas:"), writeln(H.nCurtidas), 
-	write("Respostas:"), writeln(H.nRespostas), nl, exibirTweetsAux(T).
+	write("Numero de Respostas:"), writeln(H.nRespostas), nl, exibirTweetsAux(T).
+
+exibirTweetComRespostas(Id) :-
+    lerJSON('util/database/tweets.json', Tweets),
+    getTweet(Tweets, Id, Out),
+    exibirTweetsAux([Out]),
+    write("Respostas:"), nl,
+    split_string(Out.respostas, "\s", "\s", L),
+    exibirRespostas(L).
+
+exibirRespostas([]).
+exibirRespostas([H|T]) :- 
+    lerJSON('util/database/tweets.json', Tweets), 
+    getTweet(Tweets, H, Tweet), 
+    exibirTweetsAux([Tweet]), 
+    exibirRespostas(T).
+
+
+getTweet([], _, []).
+getTweet([H|_], H.id, H).
+getTweet([_|T], Login, Out) :- 
+    getTweet(T, Login, Out).
 
 exibirTweets(FilePath) :-
     lerJSON(FilePath, Tweets),
@@ -54,7 +75,6 @@ editarTextoTweet(IdAgente, NovoNome) :-
     lerJSON('util/database/tweets.json', File),
     editarTextoTweet(File, IdAgente, NovoNome, SaidaParcial),
     tweetsToJSON(SaidaParcial, Saida),
-    writeln(NovoNome),
     exibirTweets('util/database/tweets.json'),
     open('util/database/tweets.json', write, Stream), write(Stream, Saida), close(Stream).
 
@@ -101,8 +121,8 @@ addResposta([H|T], H.id, IdResposta, [_{nome:H.nome, id:H.id, texto:H.texto, nCu
 addResposta([H|T], Id, IdResposta, [H|Out]) :- addResposta(T, Id, IdResposta, Out).
 
 addResposta(Nome, Texto, IdRespondido) :-
+    id(ID),
     addTweet(Nome, Texto),
-    id(ID), writeln(ID),
     addNResposta(IdRespondido),
     lerJSON('util/database/tweets.json', File),
     addResposta(File, IdRespondido, ID, SaidaParcial),
