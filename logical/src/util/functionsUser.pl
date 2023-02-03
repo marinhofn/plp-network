@@ -1,4 +1,4 @@
-:- module(functionsUser, [addUsuario/2, addCurtidaUsuario/2, addSeguidor/2, listaSeguidores/2, showUsuario/1, removerSeguidor/2]).
+:- module(functionsUser, [addUsuario/2, addCurtidaUsuario/2, addSeguidor/2, listaSeguidores/2, showUsuario/1, removerSeguidor/2, listaCurtidas/2]).
 :- use_module(library(http/json)).
 
 addUsuario(Login, Senha) :-
@@ -44,7 +44,7 @@ addCurtida([], _, _, []).
 addCurtida([H|T], H.login, IdCurtido, [_{login:H.login, senha:H.senha, seguindo:H.seguindo, curtidas: Y}|T]) :- 
     atom_concat(IdCurtido, " ", W), atom_concat(H.curtidas, W, Y).
 addCurtida([H|T], Login, IdCurtido, [H|Out]) :- 
-	addCurtidaJSON(T, Login, IdCurtido, Out).
+	addCurtida(T, Login, IdCurtido, Out).
 
 addCurtidaUsuario(Login, IdCurtido) :-
     readJSON('util/database/usuarios.json', File),
@@ -59,7 +59,7 @@ getUsuario([_|T], Login, Out) :-
 
 listaCurtidas(Login, L) :-
     readJSON('util/database/usuarios.json', File),
-    getUsuario(File, Login, Out),
+    getUsuario(File, LoginString, Out),
     split_string(Out.curtidas, "\s", "\s", L).
 
 

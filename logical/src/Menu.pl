@@ -16,13 +16,14 @@ menuInicial() :-
         writeln('Opção inválida!'), nl,
         menuInicial()
     ).
-  
+
+cls :- write('\33\[2J').
+
 loginTerminal :-
     writeln('Digite seu login: '),
     read(Login),
     writeln('Digite sua senha: '),
     read(Senha),
-    %validarLogin(Login, Senha),
     menuUsuario(Login).
   
 cadastroTerminal :-
@@ -55,8 +56,6 @@ menuUsuario(Login) :-
         writeln('Opção inválida!'), nl,
         menuUsuario(Login)
     ).
-  
-
 
 criarTweet(Login) :-
     writeln('Digite o texto do tweet: '), nl,
@@ -70,26 +69,30 @@ criarTweet(Login) :-
 
 verTweets(Login) :- 
     writeln('Tweets:'),
-    exibirMeusTweets(Login),
+    atom_string(Login, LoginString),
+    exibirMeusTweets(LoginString),
     writeln('Pressione qualquer tecla para voltar ao menu inicial.'),
     read(Aux),
     menuUsuario(Login).
 
 verTimeline(Login) :- 
     writeln('Timeline: '),
-    exibirMinhaTimeLine(Login),
+    atom_string(Login, LoginString),
+    exibirMinhaTimeLine(LoginString),
     writeln('Digite o ID do tweet que deseja acessar: '),
     read(IDTweet),
     acessarTweetTimeline(Login, IDTweet),
     menuUsuario(Login).
 
-acessarTweetFromTimeline(Login, IDTweet) :-
-    tweetComRespostas(IDTweet),
+acessarTweetTimeline(Login, IDTweet) :-
+    cls,
+    atom_string(IDTweet, IDTweetString),
+    exibirTweetComRespostas(IDTweetString),
     writeln('1 - Curtir     2 - Responder       3 - Voltar'),
     read(Option),
     (
-        Option =:= 1 -> curtirTweet(Login, IDTweet);
-        Option =:= 2 -> responderTweet(Login, IDTweet);
+        Option =:= 1 -> curtirTweet(Login, IDTweetString);
+        Option =:= 2 -> responderTweet(Login, IDTweetString);
         Option =:= 3 -> menuUsuario(Login);
         writeln('Opção inválida!'), nl,
         menuUsuario(Login)
@@ -97,25 +100,28 @@ acessarTweetFromTimeline(Login, IDTweet) :-
 
 verCurtidas(Login) :-
     writeln('\nCurtidas: '),
-    exibirMinhasCurtidas(Login),
+    atom_string(Login, LoginString),
+    exibirMinhasCurtidas(LoginString),
     writeln('\nPressione qualquer tecla para voltar ao menu inicial.\n'),
     read(Aux),
     menuUsuario(Login).
 
 curtirTweet(Login, IDTweet) :-
     addCurtida(IDTweet, Login),
-    writeln('\nTweet curtido!\n').
+    cls,
+    exibirTweetComRespostas(IDTweet).
 
 responderTweet(Login, IDTweet) :-
     writeln('\nDigite o texto da resposta: '),
     read(Texto),
     addResposta(Login, Texto, IDTweet),
-    writeln('\nResposta publicada!\n').
+    cls,
+    exibirTweetComRespostas(IDTweet).
 
 seguir(Login) :-
     writeln('Digite o nome de usuário que deseja seguir: '),
-    read(LoginAmigoString),
-    addSeguidor(Login, LoginAmigoString),
+    read(Amigo),
+    addSeguidor(Login, Amigo),
     writeln('Seguindo!'),
     menuUsuario(Login).
 

@@ -25,9 +25,10 @@ exibirTweetComRespostas(Id) :-
     lerJSON('util/database/tweets.json', Tweets),
     getTweet(Tweets, Id, Out),
     exibirTweetsAux([Out]),
-    write("Respostas:"), nl,
-    split_string(Out.respostas, "\s", "\s", L),
-    exibirRespostas(L).
+    respostas(Out.respostas).
+
+respostas("").
+respostas(Lista) :- write("Respostas:"), nl, split_string(Lista, "\s", "\s", L), exibirRespostas(L).
 
 exibirRespostas([]).
 exibirRespostas([H|T]) :- 
@@ -149,9 +150,13 @@ minhasCurtidas([_|T], ListaCurtidos, Out) :- minhasCurtidas(T, ListaCurtidos, Ou
 
 
 exibirMinhasCurtidas(Login) :-
-    listaCurtidas(Login, Lista),
+    atom_string(Login, LoginString),
+    writeln(Login),
+    listaCurtidas(LoginString, Lista),
+    writeln(Lista),
     lerJSON('util/database/tweets.json', File),
     minhasCurtidas(File, Lista, Out),
+    writeln(Out),
     reverse(Out, Saida),
     exibirTweetsAux(Saida).
 
