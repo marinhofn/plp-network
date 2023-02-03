@@ -1,4 +1,4 @@
-:- module(functionsUser, [addUsuario/2, addCurtidaUsuario/2, addSeguidor/2, listaSeguidores/2, showUsuario/1]).
+:- module(functionsUser, [addUsuario/2, addCurtidaUsuario/2, addSeguidor/2, listaSeguidores/2, showUsuario/1, removerSeguidor/2]).
 :- use_module(library(http/json)).
 
 addUsuario(Login, Senha) :-
