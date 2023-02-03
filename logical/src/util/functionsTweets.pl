@@ -1,4 +1,4 @@
-:- module(functionsTweets, [addTweet/2, exibirTweets/1, editarTextoTweet/2, removerTweet/2, addCurtida/2, addResposta/3, exibirMeusTweets/1, exibirMinhasCurtidas/1, exibirMinhaTimeLine/1, exibirTweetComRespostas/1]).
+:- module(functionsTweets, [addTweet/2, editarTextoTweet/2, removerTweet/2, addCurtida/2, addResposta/3, exibirMeusTweets/1, exibirMinhasCurtidas/1, exibirMinhaTimeLine/1, exibirTweetComRespostas/1]).
 :- use_module(library(http/json)).
 :- use_module('functionsUser.pl').
 
@@ -71,9 +71,9 @@ editarTextoTweet([H|T], H.id, Texto, [_{nome:H.nome, id:H.id, texto:Texto, nCurt
 editarTextoTweet([H|T], Id, Texto, [H|Out]) :- 
 	editarTextoTweet(T, Id, Texto, Out).
 
-editarTextoTweet(IdAgente, NovoNome) :-
+editarTextoTweet(Id, NovoNome) :-
     lerJSON('util/database/tweets.json', File),
-    editarTextoTweet(File, IdAgente, NovoNome, SaidaParcial),
+    editarTextoTweet(File, Id, NovoNome, SaidaParcial),
     tweetsToJSON(SaidaParcial, Saida),
     exibirTweets('util/database/tweets.json'),
     open('util/database/tweets.json', write, Stream), write(Stream, Saida), close(Stream).
@@ -83,8 +83,8 @@ removerTweet([], _, []).
 removerTweet([H|T], H.id, T).
 removerTweet([H|T], Id, [H|Out]) :- removerTweet(T, Id, Out).
 
-removerTweet(FilePath, Id) :-
-   lerJSON(FilePath, File),
+removerTweet(Id) :-
+   lerJSON('util/database/tweets.json', File),
    removerTweet(File, Id, SaidaParcial),
    tweetsToJSON(SaidaParcial, Saida),
    open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
@@ -130,7 +130,7 @@ addResposta(Nome, Texto, IdRespondido) :-
     open('util/database/tweets.json', write, Stream), write(Stream, Saida), close(Stream).
 
 
-% Mudando o texto de um tweet
+
 meusTweets([], _, []).
 meusTweets([H|T], H.nome, [H|Out]) :- meusTweets(T, H.nome, Out).
 meusTweets([_|T], Nome, Out) :- meusTweets(T, Nome, Out).
@@ -142,7 +142,7 @@ exibirMeusTweets(Nome) :-
     reverse(Lista, Saida),
     exibirTweetsAux(Saida).
 
-% Mudando o texto de um tweet
+
 minhasCurtidas([], _, []).
 minhasCurtidas([H|T], ListaCurtidos, [H|Out]) :- member(H.id, ListaCurtidos), minhasCurtidas(T, ListaCurtidos, Out).
 minhasCurtidas([_|T], ListaCurtidos, Out) :- minhasCurtidas(T, ListaCurtidos, Out).
