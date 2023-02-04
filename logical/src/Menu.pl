@@ -17,7 +17,7 @@ menuInicial() :-
         menuInicial()
     ).
 
-cls :- write('\33\[2J').
+cls :- shell('clear', [ignore(true)]).
 
 loginTerminal :-
     writeln('Digite seu login: '),
@@ -85,7 +85,6 @@ verTimeline(Login) :-
     menuUsuario(Login).
 
 acessarTweetTimeline(Login, IDTweet) :-
-    cls(),
     atom_string(IDTweet, IDTweetString),
     exibirTweetComRespostas(IDTweetString),
     writeln('1 - Curtir     2 - Responder       3 - Voltar'),
