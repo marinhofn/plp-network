@@ -17,7 +17,7 @@ menuInicial() :-
         menuInicial()
     ).
 
-cls :- shell('clear', [ignore(true)]).
+cls :- write('\33\[2J').
 
 loginTerminal :-
     writeln('Digite seu login: '),
@@ -44,14 +44,15 @@ menuUsuario(Login) :-
     writeln("7 - Ver minhas curtidas"),
     writeln("8 - Deslogar\n"),
     read(Option),
+    atom_string(Login, LoginString),
     (
-        Option =:= 1 -> criarTweet(Login);
-        Option =:= 2 -> verTweets(Login);
-        Option =:= 3 -> deletarTweet(Login);
-        Option =:= 4 -> verSeguindo(Login);
-        Option =:= 5 -> verTimeline(Login);
-        Option =:= 6 -> seguir(Login);
-        Option =:= 7 -> verCurtidas(Login);
+        Option =:= 1 -> criarTweet(LoginString);
+        Option =:= 2 -> verTweets(LoginString);
+        Option =:= 3 -> deletarTweet(LoginString);
+        Option =:= 4 -> verSeguindo(LoginString);
+        Option =:= 5 -> verTimeline(LoginString);
+        Option =:= 6 -> seguir(LoginString);
+        Option =:= 7 -> verCurtidas(LoginString);
         Option =:= 8 -> menuInicial();
         writeln('Opção invalida!'), nl,
         menuUsuario(Login)
@@ -85,6 +86,7 @@ verTimeline(Login) :-
     menuUsuario(Login).
 
 acessarTweetTimeline(Login, IDTweet) :-
+    cls(),
     atom_string(IDTweet, IDTweetString),
     exibirTweetComRespostas(IDTweetString),
     writeln('1 - Curtir     2 - Responder       3 - Voltar'),
