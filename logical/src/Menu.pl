@@ -137,6 +137,6 @@ deletarTweet(Login) :-
     writeln('\nDigite o ID do tweet que deseja deletar: '),
     read(IDTweet),
     atom_string(IDTweet, IDTweetString),
-    removerTweet(IDTweetString),
+    deleteTweet(IDTweetString),
     writeln('Tweet deletado!'),
     menuUsuario(Login).

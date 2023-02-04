@@ -1,4 +1,4 @@
-:- module(functionsTweets, [addTweet/2, editarTextoTweet/2, removerTweet/1, addCurtida/2, addResposta/3, exibirMeusTweets/1, exibirMinhasCurtidas/1, exibirMinhaTimeLine/1, exibirTweetComRespostas/1]).
+:- module(functionsTweets, [addTweet/2, editarTextoTweet/2, addCurtida/2, addResposta/3, exibirMeusTweets/1, exibirMinhasCurtidas/1, exibirMinhaTimeLine/1, exibirTweetComRespostas/1]).
 :- use_module(library(http/json)).
 :- use_module('functionsUser.pl').
 
@@ -79,16 +79,17 @@ editarTextoTweet(Id, NovoNome) :-
     exibirTweets('util/database/tweets.json'),
     open('util/database/tweets.json', write, Stream), write(Stream, Saida), close(Stream).
 
-% Removendo agente
-removerTweet([], _, []).
-removerTweet([H|T], H.id, T).
-removerTweet([H|T], Id, [H|Out]) :- removerTweet(T, Id, Out).
-
-removerTweet(Id) :-
-   lerJSON('util/database/tweets.json', File),
-   removerTweet(File, Id, SaidaParcial),
-   tweetsToJSON(SaidaParcial, Saida),
-   open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
+% Removendo 
+% removerTweet([], _, []).
+% removerTweet([H|T], H.id, T).
+% removerTweet([H|T], Id, [H|Out]) :- removerTweet(T, Id, Out).
+%
+% deleteTweet(Id) :-
+%    lerJSON('util/database/tweets.json', File),
+%    atom_string(Id, IdString)
+%    removerTweet(File, IdString, SaidaParcial),
+%    tweetsToJSON(SaidaParcial, Saida),
+%    open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
 
 
 % Mudando o texto de um tweet
