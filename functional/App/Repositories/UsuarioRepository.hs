@@ -39,7 +39,6 @@ followFriend conn nome1 nome2 = do
             aux <- getLine
             return ()
 
-
 abandonarAmigo:: Connection -> String -> String -> IO ()
 abandonarAmigo conn nome1 nome2 = do
     let q = "delete from seguidores where id=? and idSeguido=?"
@@ -68,19 +67,6 @@ validarSenha conn login = do
     let q = "select senha from usuarios where id=?"
     [Only senha] <- query conn q (Only login)
     return senha
-
--- getSeguindo :: Connection -> String -> IO [String]
--- getSeguindo conn login = do
---     let q = "select idSeguido from seguidores where id=?"
---     query conn q [login]:: IO [String]
-
--- getSeguidores :: Connection -> String -> IO [Usuario]
--- getSeguidores conn login = do
---     let q = "select id \
---             \from seguidores INNER JOIN Usuarios \
---             \on seguidores.idSeguido = Usuarios.id \
---             \where seguidores.idSeguido=?"
---     query conn q [login]:: IO [Usuario]
 
 getSeguindo :: Connection -> String -> IO [Usuario]
 getSeguindo conn login = do
